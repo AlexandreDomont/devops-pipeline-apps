@@ -43,7 +43,7 @@ pipeline {
       sh ' mvn clean compile'
      }
     }
-    
+   } 
   stage('Unit Tests') {
    when {
     anyOf { branch 'master'; branch 'develop' }
