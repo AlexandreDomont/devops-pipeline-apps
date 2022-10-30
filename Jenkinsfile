@@ -28,9 +28,7 @@ pipeline {
     checkout scm
    }
   }
-  stage('Build') {
-   parallel {
-    stage('Compile') {
+  Stage('Compile') {
      agent {
       docker {
        image 'maven:3.6.0-jdk-8-alpine'
@@ -42,8 +40,7 @@ pipeline {
      steps {
       sh ' mvn clean compile'
      }
-    }
-   } 
+    }   
   stage('Unit Tests') {
    when {
     anyOf { branch 'master'; branch 'develop' }
