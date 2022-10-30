@@ -6,7 +6,7 @@ pipeline {
   // This can be http or https
   NEXUS_PROTOCOL = "http"
   // Where your Nexus is running. In my case:
-  NEXUS_URL = "ec2-52-212-29-159.eu-west-1.compute.amazonaws.com:8081"
+  NEXUS_URL = "151.80.42.31:8081"
   // Repository where we will upload the artifact
   NEXUS_REPOSITORY = "maven-snapshots"
   // Jenkins credential id to authenticate to Nexus OSS
@@ -16,7 +16,7 @@ pipeline {
     to obtains this address : $ docker-machine ip
     Linux: set localhost to SONARQUBE_URL
   */
-  SONARQUBE_URL = "http://192.168.99.100"
+  SONARQUBE_URL = "http://151.80.42.31"
   SONARQUBE_PORT = "9000"
  }
  options {
@@ -43,28 +43,7 @@ pipeline {
       sh ' mvn clean compile'
      }
     }
-    stage('CheckStyle') {
-     agent {
-      docker {
-       image 'maven:3.6.0-jdk-8-alpine'
-       args '-v /root/.m2/repository:/root/.m2/repository'
-       reuseNode true
-      }
-     }
-     steps {
-      sh ' mvn checkstyle:checkstyle'
-      step([$class: 'CheckStylePublisher',
-       //canRunOnFailed: true,
-       defaultEncoding: '',
-       healthy: '100',
-       pattern: '**/target/checkstyle-result.xml',
-       unHealthy: '90',
-       //useStableBuildAsReference: true
-      ])
-     }
-    }
-   }
-  }
+    
   stage('Unit Tests') {
    when {
     anyOf { branch 'master'; branch 'develop' }
